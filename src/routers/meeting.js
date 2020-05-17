@@ -1,26 +1,21 @@
 const express = require('express')
-const Task = require('../models/meeting')
+const Meeting = require('../models/meeting')
+
 const router = new express.Router()
+const userController = require('../controllers/userController');
+const auth = require('../middleware/auth')
+router.post('/createMeeting',auth ,userController.grantAccess('create', 'meeting'), userController.createMeeting);
 
-router.post('/create', async (req, res) => {
-    const task = new Task(req.body)
-
+router.get('/meetings',auth , async (req, res) => {
     try {
-        await task.save()
-        res.status(201).send(task)
-    } catch (e) {
-        res.status(400).send(e)
-    }
-})
-
-router.get('/get', async (req, res) => {
-    try {
-        const tasks = await Task.find({})
-        res.send(tasks)
+        const meeting = await Meeting.find({})
+        res.send(meeting)
     } catch (e) {
         res.status(500).send()
     }
 })
+
+router.delete('/delete/:_id', auth, userController.grantAccess('delete', 'meeting'), userController.deleteMeeting);
 
 
 module.exports = router

@@ -7,11 +7,12 @@ exports.roles = (function() {
   ac.grant("cat2")
     .delete("meeting")
     .create("meeting")
-    
 
   ac.grant("cat3")
     .extend("cat2")
     .delete("user")
+
+  ac.grant("cat4")  
 
   ac.grant("cat5")
     .extend("cat2")
